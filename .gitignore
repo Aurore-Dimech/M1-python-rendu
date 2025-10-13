@@ -4,3 +4,5 @@ __pycache__
 .vscode
 .ruff_cache
 .github
+test.db
+*.db

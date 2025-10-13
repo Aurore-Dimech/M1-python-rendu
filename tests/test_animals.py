@@ -1,9 +1,8 @@
-import logging
-
 import pytest
 from fastapi.testclient import TestClient
 
-from app.api.routes.animals import animals_db
+from app.api.init_db import init_db
+from app.db import Base, engine
 from app.enums.enum_race import Race
 from app.main import app
 from app.utils.logger import get_logger
@@ -12,17 +11,17 @@ client = TestClient(app)
 
 logger = get_logger(__name__)
 
-logging.basicConfig(level=logging.DEBUG)
 
-
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="function")
 def reset_database():
-    original_db = animals_db.copy()
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+    init_db()
 
     yield
 
-    animals_db.clear()
-    animals_db.extend(original_db)
+    Base.metadata.drop_all(bind=engine)
 
 
 def test_get_all_animals():
