@@ -47,7 +47,7 @@ def test_get_all_animals():
 
 def test_get_animals_filter_by_race():
     """
-    Test que GET /animals avec un filtre utilisé sur la query retourne tous les animaux correspondant au filtre
+    Test que GET /animals avec un filtre utilisé sur la query retourne tous les animaux correspondant au filtre race
     """
     response = client.get(
         "/animals/?race=Poule",
@@ -58,17 +58,40 @@ def test_get_animals_filter_by_race():
     assert isinstance(animals, list)
     assert len(animals) == 3  # On a 3 poules dans la DB initiale
 
-    # Vérifier que toutes les poules ont le bon auteur
     for animal in animals:
         assert (
             animal["race"] == Race.CHICKEN.value
-        )  # Vérifier qu'on a la bonne race pour tous les animaux
+        ) # Vérifier qu'on a la bonne race pour tous les animaux
         # Vérifier la structure des animaux
         assert "id" in animal
         assert "name" in animal
         assert "race" in animal
         assert "status" in animal
         assert "birth_date" in animal
+        
+def test_get_animals_filter_by_status():
+    """
+    Test que GET /animals avec un filtre utilisé sur la query retourne tous les animaux correspondant au filtre status
+    """
+    
+    response = client.get(
+        "/animals/?status=0",
+    )
+
+    assert response.status_code == 200
+    animals = response.json()
+    assert isinstance(animals, list)
+    assert len(animals) == 1  # On a 1 animal mort dans la DB initiale
+
+    assert (
+        animals[0]["status"] == Status.DEAD.value
+    )  # Vérifier qu'on a le bon statut pour l'animal
+    # Vérifier la structure de l'animal
+    assert "id" in animals[0]
+    assert "name" in animals[0]
+    assert "race" in animals[0]
+    assert "status" in animals[0]
+    assert "birth_date" in animals[0]
 
 
 def test_get_animal_by_id():
