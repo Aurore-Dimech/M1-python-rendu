@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Response
 
+from app.api.init_db import init_db
 from app.api.routes import animals
+from app.db import Base, engine
 from app.utils.logger import get_logger, setup_logging
 
 setup_logging()
@@ -16,6 +18,16 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
 )
+
+
+def create_tables():
+    logger.info("Creating database tables if they don't exist...")
+    Base.metadata.create_all(bind=engine)
+    init_db()
+    logger.info("Database tables created successfully.")
+
+
+create_tables()
 
 
 @app.get("/favicon.icon", include_in_schema=False)
