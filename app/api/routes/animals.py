@@ -47,7 +47,7 @@ class AnimalBase(BaseModel):
                 "name": "Adam de la Halle",
                 "race": Race.CHICKEN,
                 "status": 1,
-                "published_year": 2003,
+                "birth_date": 2003,
             }
         }
     )

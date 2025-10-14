@@ -24,14 +24,14 @@ async def favicon():
 
 
 # Root Endpoint
-@app.get("/", tags="Root")
+@app.get("/", tags=["Root"])
 async def root():
     print("QQ a accedé au endpoint")
     return {"message": "Welcome", "version": "1.0.0", "documentation": "/docs"}
 
 
 # Health Endpoint
-@app.get("/health", tags="Health")
+@app.get("/health", tags=["Health"])
 async def health_check():
     return {"status": "healthy", "service": "bib-api"}
 
